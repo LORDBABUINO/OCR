@@ -3,17 +3,25 @@ from PIL import Image
 
 myImage = Image.open("grayscale.jpg")
 myImage.convert('L')
-imgArr = []
 
-height = myImage.height
-width = myImage.width
+def imgArr(original):
 
-for i in range(height):
-	row = []
+	# Create array of image values
+	imgArr = []
 
-	for j in range(width):
-		row.append(myImage.getpixel((j,i))[0])
+	# Get height and width values
+	height = myImage.height
+	width = myImage.width
 
-	imgArr.append(row)
+	# Get all rows
+	for i in range(height):
+		row = []
 
-print(imgArr)
+		# Add each value to the row
+		for j in range(width):
+			row.append(myImage.getpixel((j,i))[0])
+
+		# Append the row to the main array
+		imgArr.append(row)
+
+	return imgArr
