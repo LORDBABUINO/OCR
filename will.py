@@ -1,10 +1,9 @@
-#import numpy
+import numpy
 from PIL import Image
 
 myImage = Image.open("grayscale.jpg")
-myImage.convert('L')
 
-def imgArr(original):
+def imgArr(myImage):
 
 	# Create array of image values
 	imgArr = []
@@ -25,3 +24,5 @@ def imgArr(original):
 		imgArr.append(row)
 
 	return imgArr
+
+print(imgArr(myImage))
