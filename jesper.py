@@ -1,7 +1,6 @@
 from PIL import Image
-from PIL import ImageFilter
 
-baseIMG = Image.open("dog.jpg").convert("L")
+baseIMG = Image.open("grayscale.jpg").convert("L")
 
 def applyFilter(img, kernel):
     i = 0        # initialize counter
