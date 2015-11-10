@@ -1,29 +1,36 @@
-from PIL import Image
-import time
+
+#import numpy
 import sys
+import time
+from PIL import Image
 
-def kernel_matrix():
-    kerArr = [-1,-1,-1,-1,8,-1,-1,-1,-1]
-    return kerArr
+def imgArr(myImage):
 
-def imgfilter(im,kernel):
-    
-    ker = kernel
-    
+    # Create array of image values
+    imgArr = []
+
     # Get height and width values
-    height = im.height
-    width = im.width
+    height = myImage.height
+    width = myImage.width
 
-    for i in range(1,width):
-        for j in range(1,height):
-                    a = im.getpixel((i,j))[0]
-                    temp = (ker[0]*(im.getpixel((i-1,j-1))[0]))+(ker[1]*(im.getpixel((i,j-1))[0]))+(ker[2]*(im.getpixel((i+1,j-1))[0]))
-                    temp1 = (ker[3]*(im.getpixel((i-1,j))[0]))+(ker[4]*(im.getpixel((i,j))[0]))+(ker[5]*(im.getpixel((i+1,j))[0]))
-                    temp2 = (ker[6]*(im.getpixel((i-1,j+1))[0]))+(ker[7]*(im.getpixel((i,j+1))[0]))+(ker[8]*(im.getpixel((i+1,j+1))[0]))
-                    b = temp+temp1+temp2
-                    
-    return 
+    # Get all rows
+    for i in range(height):
+        row = []
 
+        # Add each value to the row
+        for j in range(width):
+            row.append(myImage.getpixel((j,i)))
+
+        # Append the row to the main array
+        imgArr.append(row)
+
+    return imgArr
+
+# Input:
+#    myImage: the padded image to apply the filter to
+#    matrix: the matrix to use to multiply the image by
+# Output:
+#    Filtered image
 def applyFilter(myImage, kernel):
 
     a = 0
@@ -41,53 +48,56 @@ def applyFilter(myImage, kernel):
 
     return myImage
 
+def addPadding(im):
+    filtered = Image.new("L", (im.width + 2, im.height + 2), color = 0) #create new image that is 2 pixels wider and taller than the original
 
+    filtered.paste(im, (1, 1), None) #copy image into new image with padding of a 1 pixel border around
 
-def padding(im):
-    padded = Image.new("L", (im.width + 2, im.height + 2), color = 0) #create new image that is 2 pixels wider and taller than the original
+    return filtered
 
-    padded.paste(im, (1, 1), None) #copy image into new image with padding of a 1 pixel border around
+def kernel_matrix():
+    kernel = [-1,-1,-1,-1,8,-1,-1,-1,-1]
+    return kernel
 
-    padded.show()
-    return padded
-
+def main ():
+    #formatting for the main menu
+    print("{0:-^50s}".format(''))
+    print("{0:-^50s}".format('  Main Menu  '))
+    print("{0:-^50s}".format(''))
+    print("{0:^50s}".format('Welcome to the CP467 Final Project demo.'))
+    print()
     
-#formatting for the main menu
-print("{0:-^50s}".format(''))
-print("{0:-^50s}".format('  Main Menu  '))
-print("{0:-^50s}".format(''))
-print("{0:^50s}".format('Welcome to the CP467 Final Project demo.'))
-print()
-
-# gives the user the choice of whether to run the program or end
-print("{0:^50s}".format('1. Run demo'))
-print("{0:^50s}".format('2. Quit'))
-
-#adds blanks lines and waits for the user input 
-print()
-menuoption = input('Enter your choice here: ')
-print()
-
-# menu option 1 is chosen
-if menuoption == "1":
-    print("Demo started")
+    # gives the user the choice of whether to run the program or end
+    print("{0:^50s}".format('1. Run demo'))
+    print("{0:^50s}".format('2. Quit'))
     
-    # gets the filename from the user, opens the file, and tells user it imported successfully
-    filename = input('Please enter the filename for the image you\'d like to use: ')
-    im = Image.open(filename)
-    print("Image imported")
+    #adds blanks lines and waits for the user input 
+    print()
+    menuoption = input('Enter your choice here: ')
+    print()
     
-    img = padding(im)
-    myImage = applyfilter(img,kernel_matrix())
-# CODE FOR FILTERING GOES HERE
+    # menu option 1 is chosen
+    if menuoption == "1":
+        print("Demo started")
+        
+        # gets the filename from the user, opens the file, and tells user it imported successfully
+        filename = input('Please enter the filename for the image you\'d like to use: ')
+        im = Image.open(filename)
+        print("Image imported")
+        
+        img = addPadding(im)
+        myImage = applyFilter(img,kernel_matrix())
+    # CODE FOR FILTERING GOES HERE
+        
+        # Shows the user the image
+        myImage.show()
     
-    # Shows the user the image
-    myImage.show()
-
-# menu option 2 is chosen
-elif menuoption == "2":
-   
-    # exits the program
-    print("Quitting program..")
-    time.sleep(1.5)
-    sys.exit
+    # menu option 2 is chosen
+    elif menuoption == "2":
+       
+        # exits the program
+        print("Quitting program..")
+        time.sleep(1.5)
+        sys.exit
+        
+main()
