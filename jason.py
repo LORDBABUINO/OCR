@@ -3,7 +3,7 @@ import time
 import sys
 
 def kernel_matrix():
-    kerArr = [-1,-1,-1,-1,8,-1,-1,-1,-1]
+    kerArr = [0,-1,0,-1,4,-1,0,-1,0]
     return kerArr
 
 def imgfilter(im,kernel):
@@ -78,7 +78,7 @@ if menuoption == "1":
     print("Image imported")
     
     img = padding(im)
-    myImage = applyfilter(img,kernel_matrix())
+    myImage = applyFilter(img,kernel_matrix())
 # CODE FOR FILTERING GOES HERE
     
     # Shows the user the image

@@ -1,7 +1,46 @@
+import sys
 import numpy
 from PIL import Image
 
 myImage = Image.open("Lowpass_original.jpg").convert("L")
+
+# Cuts the image given the max/min (x,y) values
+def cutImage(myImage, xMin, xMax, yMin, yMax):
+
+	return
+
+def findExtreme(myImage, xSize, ySize, minOrMax, xOrY):
+
+	if minOrMax == "min":
+		start = ___ - 1
+	elif minOrMax == "max":
+		start = 0
+	else:
+		sys.exit("Input can only be either min or max.")
+
+	# Find the smallest x-value
+	myMin = xSize - 1
+
+	for row in range(ySize):
+		count = 0
+		test = myImage.getpixel((count, row))
+
+		while test != 255:
+			count += 1
+			test = myImage.getpixel((count, row))
+
+		if count < myMin:
+			myMin = count
+
+	return myMin
+
+# Scales the image down to the default size
+def scaleImage(myImage, xSize, ySize):
+
+
+
+	# Returns the scaled image
+	return 
 
 def imgArr(myImage):
 
@@ -56,19 +95,11 @@ def addPadding(im):
 
 kernel = [-1,-1,-1,-1,8,-1,-1,-1,-1]
 
-print(myImage.size)
-
 myImage = addPadding(myImage)
 
 myImage.show()
 
-print(imgArr(myImage))
-
-print(myImage.size)
-
 myImage = applyFilter(myImage, kernel)
-
-print(imgArr(myImage))
 
 myImage.save("test.jpg")
 myImage.show()
