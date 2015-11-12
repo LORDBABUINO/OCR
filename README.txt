@@ -1,3 +1,15 @@
+UPDATE NOVEMBER 12th:
+-Basic scaling algorithm implemented
+-Thinning algorithm implemented but not tested
+-Filtering function implemented (float + proper padding implemented, still need to figure out kernels for high pass, low pass, and mean filters)
+
+Questions to ask Professor on November 13th:
+-How do we approach the rotation problem?
+-Show him our algorithm from front to back, to ensure that we have all components that we are required to have
+-Show him our code (make sure using the Image library is OK and everything is being done as intended)
+-Which filters do you want? Determine the kernel to use for high/low pass + mean
+-
+
 To Do:
 
 -Fix the padding function (should not be zeros, it should be the same as the edge value of the picture)
