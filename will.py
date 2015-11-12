@@ -2,45 +2,95 @@ import sys
 import numpy
 from PIL import Image
 
-myImage = Image.open("Lowpass_original.jpg").convert("L")
+#myImage = Image.open("testing2.jpg").convert("L")
+
+myImage = Image.new("L", (90,90), color=255)
+
+myImage.putpixel((40,45), 65)
+myImage.putpixel((60,50), 65)
 
 # Cuts the image given the max/min (x,y) values
 def cutImage(myImage, xMin, xMax, yMin, yMax):
 
 	return
 
-def findExtreme(myImage, xSize, ySize, minOrMax, xOrY):
+def check(minOrMax, count, start):
 
 	if minOrMax == "min":
-		start = ___ - 1
+		return count < start
+	else:
+		return count > start
+
+def findExtreme(myImage, minOrMax, xOrY):
+
+	xSize = myImage.size[0]
+	ySize = myImage.size[1]
+
+	if xOrY == "x":
+		outside = xSize
+		inside = ySize
+	elif xOrY == "y":
+		outside = ySize
+		inside = xSize
+	else:
+		sys.exit("Input can only be either x or y.")
+
+	if minOrMax == "min":
+		start = outside - 1
+		end = 0
 	elif minOrMax == "max":
 		start = 0
+		end = outside - 1
 	else:
 		sys.exit("Input can only be either min or max.")
 
 	# Find the smallest x-value
-	myMin = xSize - 1
+	myVal = start
 
-	for row in range(ySize):
-		count = 0
-		test = myImage.getpixel((count, row))
+	for row in range(inside):
+		count = end
 
-		while test != 255:
-			count += 1
+		if xOrY == "x":
 			test = myImage.getpixel((count, row))
+		else:
+			test = myImage.getpixel((row, count))
 
-		if count < myMin:
-			myMin = count
+		while test == 255 and check(minOrMax, count, start):
+			
+			if minOrMax == "min":
+				count += 1
+			else:
+				count -= 1
+			
+			if xOrY == "x":
+				test = myImage.getpixel((count, row))
+			else:
+				test = myImage.getpixel((row, count))
+		
+		if minOrMax == "min":
+			if count < myVal:
+				myVal = count
+		else:
+			if count > myVal:
+				myVal = count
 
-	return myMin
+	return myVal
 
 # Scales the image down to the default size
-def scaleImage(myImage, xSize, ySize):
+def scaleImage(myImage):
 
+	xMin = findExtreme(myImage, "min", "x")
+	xMax = findExtreme(myImage, "max", "x")
+	yMin = findExtreme(myImage, "min", "y")
+	yMax = findExtreme(myImage, "max", "y")
 
+	print("xMin:", xMin, "xMax:", xMax)
+	print("yMin:", yMin, "yMax:", yMax)
+
+	myImage = myImage.crop((xMin, yMin, xMax, yMax))
 
 	# Returns the scaled image
-	return 
+	return myImage
 
 def imgArr(myImage):
 
@@ -93,13 +143,6 @@ def addPadding(im):
 
 	return filtered
 
-kernel = [-1,-1,-1,-1,8,-1,-1,-1,-1]
+myImage = scaleImage(myImage)
 
-myImage = addPadding(myImage)
-
-myImage.show()
-
-myImage = applyFilter(myImage, kernel)
-
-myImage.save("test.jpg")
 myImage.show()
