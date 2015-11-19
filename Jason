@@ -3,6 +3,22 @@ import time
 import math
 from PIL import Image
 
+def percentOfPixels(img):
+    count = 0 
+    imgSize = img.width*img.height
+    
+    for i in range(img.width-1):
+        for j in range(img.height-1):
+            pixelValue = img.getpixel((i,j))
+            if pixelValue == 0:
+                count += 1
+    
+    percent = count/imgSize
+    
+    return percent 
+
+
+
 def imgArr(myImage):
 
     # Create array of image values
