@@ -15,14 +15,17 @@ def imgArr(myImage):
     # Get all rows
     for i in range(height):
         row = []
-
         # Add each value to the row
         for j in range(width):
             row.append(myImage.getpixel((j,i)))
 
         # Append the row to the main array
         imgArr.append(row)
-
+        
+    for n in range(len(imgArr)):
+        print (imgArr[n])
+        print ("\n")
+        
     return imgArr
 
 # Input:
@@ -66,126 +69,177 @@ def convolute(imageArray, kernel):
 #contains the 20 rules for thinning.
 def thinning(img):
     
-    # to identify each pixel 
-    # (i-1,j-1)|(i,j-1)|(i+1,j-1)
-    #----------------------------
-    #  (i-1,j) | (i,j) |(i+1,j)
-    #----------------------------
-    # (i-1,j+1)|(i,j+1)|(i+1,j+1)
-    
+    temp = Image.new("1", (img.width-1, img.height-1))  #create new image
     Thinned = Image.new("1", (img.width-1, img.height-1))  #create new image
-    
+    pixelCounter = 0
+    deleted = True
+    count = 0
+    size = (img.width-1) * (img.height-1)
     imgA = []                                          #used to get the pixels around the pixel in question
     
-    for i in range(0, img.width - 1):                  #for every pixel within padding
-        for j in range(0, img.height - 1):
-            del imgA[:]                                #clear imageArray each loop
-            if i==0 or j==0:
-                imgA.append(255)
-            else:
-                imgA.append(img.getpixel((i-1, j-1)))      #populate imageArray with top left pixel
-            if j==0:
-                imgA.append(255)
-            else:
-                imgA.append(img.getpixel((i, j-1)))        #populate imageArray with top middle pixel
-            if j==0:
-                imgA.append(255)
-            else:
-                imgA.append(img.getpixel((i+1, j-1)))      #populate imageArray with top right pixel
-            if i==0:
-                imgA.append(255)
-            else:
-                imgA.append(img.getpixel((i-1, j)))        #populate imageArray with middle left pixel
-            imgA.append(img.getpixel((i, j)))          #populate imageArray with middle pixel
-            imgA.append(img.getpixel((i+1, j)))        #populate imageArray with middle right pixel
-            if i==0:
-                imgA.append(255)
-            else:
-                imgA.append(img.getpixel((i-1, j+1)))      #populate imageArray with bottom left pixel
-            imgA.append(img.getpixel((i, j+1)))        #populate imageArray with bottom middle pixel
-            imgA.append(img.getpixel((i+1, j+1)))      #populate imageArray with bottom right pixel
+    while deleted:
+        
+        deleted = False
+        
+        for i in range(0, img.width-1):                  #for every pixel within padding
+            for j in range(0, img.height-1):
+                del imgA[:] 
+
+                if i == 0 or j == 0:
+                    imgA.append(255)
+                else:               
+                    imgA.append(img.getpixel((i-1, j-1)))      #populate imageArray with top left pixel
+                    
+                if j == 0:
+                    imgA.append(255)
+                else:
+                    imgA.append(img.getpixel((i, j-1)))        #populate imageArray with top middle pixel
+                    
+                if j == 0:
+                    imgA.append(255)
+                else:
+                    imgA.append(img.getpixel((i+1, j-1)))      #populate imageArray with top right pixel
+                
+                if  i == 0:
+                    imgA.append(255)
+                else:   
+                    imgA.append(img.getpixel((i-1, j)))        #populate imageArray with middle left pixel
+                    
+                imgA.append(img.getpixel((i, j)))          #populate imageArray with middle pixel
+                imgA.append(img.getpixel((i+1, j)))        #populate imageArray with middle right pixel
+                
+                if i == 0:
+                    imgA.append(255)
+                else:
+                    imgA.append(img.getpixel((i-1, j+1)))      #populate imageArray with bottom left pixel
+                    
+                imgA.append(img.getpixel((i, j+1)))        #populate imageArray with bottom middle pixel
+                imgA.append(img.getpixel((i+1, j+1)))      #populate imageArray with bottom right pixel
+                                        
+                #rule 1
+                if (imgA[0]==0 and imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[2]==255 and imgA[5]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                
+                #rule 2
+                elif (imgA[0]==0 and imgA[1]==0 and imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[5]==255 and imgA[8]==255):
+                    temp.putpixel((i,j),255)  
+                    deleted = True          
+                #rule 3 
+                elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[6]==255 and imgA[7]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 4
+                elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[7]==255 and imgA[8]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                
+                #rule 5
+                elif (imgA[0]==0 and imgA[3]==0 and imgA[4]==0 and imgA[2]==255 and imgA[5]==255 and imgA[7]==255 and imgA[8]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 6 
+                elif (imgA[0]==0 and imgA[1]==0 and imgA[4]==0 and imgA[5]==255 and imgA[6]==255 and imgA[7]==255 and imgA[8]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 7
+                elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[5]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 8
+                elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[5]==0 and imgA[6]==0 and imgA[8]==0 and imgA[7]==255):
+                    temp.putpixel((i,j),255) 
+                    deleted = True
+                    
+                #rule 9
+                elif (imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[1]==255 and imgA[2]==255 and imgA[5]==255 and imgA[8]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 10
+                elif (imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[0]==255 and imgA[1]==255 and imgA[2]==255 and imgA[5]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                #rule 11
+                elif (imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[3]==255 and imgA[6]==255 and imgA[7]==255 and imgA[8]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                
+                #rule 12
+                elif (imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[0]==255 and imgA[3]==255 and imgA[6]==255 and imgA[7]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
                                 
-            #rule 1
-            if (imgA[0]==0 and imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[2]==255 and imgA[5]==255):
-                Thinned.putpixel((i,j),255)
-            
-            #rule 2
-            elif (imgA[0]==0 and imgA[1]==0 and imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[5]==255 and imgA[8]==255):
-                Thinned.putpixel((i,j),255)            
-            #rule 3 
-            elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[6]==255 and imgA[7]==255):
-                Thinned.putpixel((i,j),255)
+                #rule 13 
+                elif (imgA[4]==0 and imgA[7]==0 and imgA[8]==0 and imgA[0]==255 and imgA[1]==255 and imgA[2]==255 and imgA[3]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 14
+                elif (imgA[4]==0 and imgA[5]==0 and imgA[8]==0 and imgA[0]==255 and imgA[1]==255 and imgA[3]==255 and imgA[6]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
                 
-            #rule 4
-            elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[7]==255 and imgA[8]==255):
-                Thinned.putpixel((i,j),255)
-            
-            #rule 5
-            elif (imgA[0]==0 and imgA[3]==0 and imgA[4]==0 and imgA[2]==255 and imgA[5]==255 and imgA[7]==255 and imgA[8]==255):
-                Thinned.putpixel((i,j),255)
+                #rule 15
+                elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[3]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 16 
+                elif (imgA[0]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[5]==0and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[1]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 17
+                elif (imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[7]==0 and imgA[8]==0 and imgA[0]==255 and imgA[3]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 18
+                elif (imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[8]==0 and imgA[3]==255 and imgA[6]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True 
+                    
+                #rule 19
+                elif (imgA[4]==0 and imgA[5]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[0]==255 and imgA[1]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                    
+                #rule 20
+                elif (imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[1]==255 and imgA[2]==255):
+                    temp.putpixel((i,j),255)
+                    deleted = True
+                else:
+                    temp.putpixel((i,j),img.getpixel((i,j)))
                 
-            #rule 6 
-            elif (imgA[0]==0 and imgA[1]==0 and imgA[4]==0 and imgA[5]==255 and imgA[6]==255 and imgA[7]==255 and imgA[8]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 7
-            elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[5]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 8
-            elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[5]==0 and imgA[6]==0 and imgA[8]==0 and imgA[7]==255):
-                Thinned.putpixel((i,j),255) 
-                
-            #rule 9
-            elif (imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[1]==255 and imgA[2]==255 and imgA[5]==255 and imgA[8]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 10
-            elif (imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[0]==255 and imgA[1]==255 and imgA[2]==255 and imgA[5]==255):
-                Thinned.putpixel((i,j),255)
-            #rule 11
-            elif (imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[3]==255 and imgA[6]==255 and imgA[7]==255 and imgA[8]==255):
-                Thinned.putpixel((i,j),255)
-            
-            #rule 12
-            elif (imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[0]==255 and imgA[3]==255 and imgA[6]==255 and imgA[7]==255):
-                Thinned.putpixel((i,j),255)
-                            
-            #rule 13 
-            elif (imgA[4]==0 and imgA[7]==0 and imgA[8]==0 and imgA[0]==255 and imgA[1]==255 and imgA[2]==255 and imgA[3]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 14
-            elif (imgA[4]==0 and imgA[5]==0 and imgA[8]==0 and imgA[0]==255 and imgA[1]==255 and imgA[3]==255 and imgA[6]==255):
-                Thinned.putpixel((i,j),255)
-            
-            #rule 15
-            elif (imgA[0]==0 and imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[3]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 16 
-            elif (imgA[0]==0 and imgA[2]==0 and imgA[3]==0 and imgA[4]==0 and imgA[5]==0and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[1]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 17
-            elif (imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[7]==0 and imgA[8]==0 and imgA[0]==255 and imgA[3]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 18
-            elif (imgA[1]==0 and imgA[2]==0 and imgA[4]==0 and imgA[5]==0 and imgA[8]==0 and imgA[3]==255 and imgA[6]==255):
-                Thinned.putpixel((i,j),255) 
-                
-            #rule 19
-            elif (imgA[4]==0 and imgA[5]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[0]==255 and imgA[1]==255):
-                Thinned.putpixel((i,j),255)
-                
-            #rule 20
-            elif (imgA[3]==0 and imgA[4]==0 and imgA[6]==0 and imgA[7]==0 and imgA[8]==0 and imgA[1]==255 and imgA[2]==255):
-                Thinned.putpixel((i,j),255)
+                pixelCounter += 1
+                                
+                if deleted:
+                    count +=1
+         
+        print (pixelCounter)
+        print (size)            
+        print (count)      
+        if pixelCounter == size:
+            print (count)
+            if count > 0:
+                deleted = True
+                i = 0
+                j = 0
+                pixelCounter = 0
+                count = 0
+                img = temp
+                print("still looping")
             else:
-                Thinned.putpixel((i,j),img.getpixel((i,j)))
+                deleted = False
+                print("done looping")
+                        
     
-    return Thinned
+    return temp
     
 def padImage(img):
     padded = Image.new("L", (img.width + 2, img.height + 2), color = 0) #create new image
@@ -277,11 +331,17 @@ def main ():
         imgFiltered.save("filteredimage.jpg")
         
     elif menuoption == "2":
+        # Gets the file from the user
         filename = input('Please enter the filename for the image you\'d like to use: ')
+        
+        # Opens file and converts the image to black and white
         imgBase = Image.open(filename).convert("1")
         imgBase.show()
+        
+        # Thins the image
         imgThinned = thinning(imgBase)
         imgThinned.show()
+        print ("done")
     elif menuoption == "3":
         print("opion 3")
     # menu option 2 is chosen
