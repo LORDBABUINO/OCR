@@ -12,8 +12,9 @@ Questions to ask Professor on November 13th:
 
 To Do:
 
--Fix the padding function (should not be zeros, it should be the same as the edge value of the picture)
--Change the values to floats ()
+- split thinned image into equal sections
+- get proportion of black pixels to white pixels from each individual section
+- save as array for feature
 
 
 
