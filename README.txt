@@ -40,8 +40,7 @@ Input: Character digit image
 	-Jason (make sure his algorithm is implemented and working)
 5. Statistical pattern method to determine the percentage of pixels in each area. Final vector is all 9 values calculated.
 6. See which character in our table the vector corresponds most accurately with. Output result to user
-
-
+7. Find the number of connected regions in the input image (i.e. number of numbers written)
 
 Functions:
 
