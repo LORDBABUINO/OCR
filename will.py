@@ -9,11 +9,6 @@ myImage = Image.new("L", (90,90), color=255)
 myImage.putpixel((40,45), 65)
 myImage.putpixel((60,50), 65)
 
-# Cuts the image given the max/min (x,y) values
-def cutImage(myImage, xMin, xMax, yMin, yMax):
-
-	return
-
 def check(minOrMax, count, start):
 
 	if minOrMax == "min":
@@ -77,7 +72,7 @@ def findExtreme(myImage, minOrMax, xOrY):
 	return myVal
 
 # Scales the image down to the default size
-def scaleImage(myImage):
+def scaleImage(myImage, width, height):
 
 	xMin = findExtreme(myImage, "min", "x")
 	xMax = findExtreme(myImage, "max", "x")
@@ -87,7 +82,10 @@ def scaleImage(myImage):
 	print("xMin:", xMin, "xMax:", xMax)
 	print("yMin:", yMin, "yMax:", yMax)
 
-	myImage = myImage.crop((xMin, yMin, xMax, yMax))
+	myImage = myImage.crop((xMin, yMin, xMax+1, yMax+1))
+
+	# Resizes the image to the given width x height
+	myImage = myImage.resize((width,height))
 
 	# Returns the scaled image
 	return myImage
@@ -143,6 +141,6 @@ def addPadding(im):
 
 	return filtered
 
-myImage = scaleImage(myImage)
+myImage = scaleImage(myImage, 120, 120)
 
 myImage.show()
