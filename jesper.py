@@ -33,7 +33,9 @@ def percentOfPixels(img):
 # Output: q - array of Image's that make up the 16 cropped images
 
 def divideImage(img):
+    i = 0                               #counter
     q = []
+    feature = []
     w25 = math.ceil(img.width / 4)      #1/4 of image's width
     w50 = math.ceil(img.width / 2)      #1/2 of image's width
     w75 = math.ceil(img.width * 0.75)   #3/4 of image's width
@@ -63,7 +65,10 @@ def divideImage(img):
     q.append(img.crop((w50, h75, w75, img.height)))
     q.append(img.crop((w75, h75, img.width, img.height)))
 
-    return q
+    for i in range(len(q)):
+        feature.append(percentOfPixels(q[i]))
+
+    return feature
 
 def imgArr(myImage):
 
@@ -343,7 +348,8 @@ def main ():
     print("{0:^50s}".format('1. Filtering'))
     print("{0:^50s}".format('2. Thinning'))
     print("{0:^50s}".format('3. Scaling'))
-    print("{0:^50s}".format('4. Quit'))
+    print("{0:^50s}".format('4. Getting features'))
+    print("{0:^50s}".format('5. Quit'))
     
     #adds blanks lines and waits for the user input 
     print()
@@ -399,8 +405,24 @@ def main ():
         print ("done")
     elif menuoption == "3":
         print("opion 3")
-    # menu option 2 is chosen
+    # menu option 3 is chosen
     elif menuoption == "4":
+        print("Getting features")
+        while True:
+            # gets the filename from the user, opens the file, and tells user it imported successfully
+            filename = input('Please enter the filename for the image you\'d like to use: ')
+
+            try:
+                imgBase = Image.open(filename).convert("L")
+                print('')
+                print('Image imported successfully')
+                print('')
+                break
+            except IOError:
+                print("Image import failed - file not found")
+
+        print(divideImage(imgBase))
+    elif menuoption == "5":
         # exits the program
         print("Quitting program..")
         time.sleep(1.5)
