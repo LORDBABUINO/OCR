@@ -71,9 +71,6 @@ def scaleImage(myImage, width, height):
 	yMin = findExtreme(myImage, "min", "y")
 	yMax = findExtreme(myImage, "max", "y")
 
-	print("xMin:", xMin, "xMax:", xMax)
-	print("yMin:", yMin, "yMax:", yMax)
-
 	myImage = myImage.crop((xMin, yMin, xMax+1, yMax+1))
 
 	# Resizes the image to the given width x height
