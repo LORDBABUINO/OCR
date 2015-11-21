@@ -156,7 +156,7 @@ def menu ():
             print(divideImage(imgBase))
         elif menuoption == "6":
             # exits the program
-            print("Quitting program...")
+            print("Quitting program.\n")
             break
         else:
             print()
