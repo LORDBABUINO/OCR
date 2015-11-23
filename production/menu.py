@@ -110,7 +110,9 @@ def menu ():
                     imgBase.show()
                     
                     # Thins the image
+                    t1=time.time()
                     imgThinned = thinning(imgBase)
+                    print(time.time()-t1)
                     imgThinned.show()
 
                     print("\nComplete.\n")
