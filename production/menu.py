@@ -4,6 +4,8 @@ from filter import *
 from thinning import *
 from scaling import *
 from whiteBlack import *
+from multiCharacters import *
+from statMethod import *
 import time
 import sys
 
@@ -43,7 +45,9 @@ def menu ():
                     break
                 except IOError:
                     print("Image import failed - file not found")
-            
+
+            myImage = myImage.resize((160,160))
+
             # Pad the image    
             myImage = padImage(myImage) 
             
@@ -56,6 +60,29 @@ def menu ():
             myImage = applyFilter(myImage, kernel)
 
             myImage.show()
+
+            # Change to BW image
+            myImage = convertBW(myImage)
+
+            myImage.show()
+
+            # Invert white/black pixels
+            myImage = invert(myImage)
+
+            myImage.show()
+
+            # Get the unique images
+            images = charactersToRead(myImage)
+            count = 0
+
+            for image in images:
+                image = scaleImage(image, 120, 120)
+                image.show()
+                image = thinning(image)
+                image.show()
+                imageArray = divideImage(image)
+                print(imageArray)
+
 
         elif menuoption == "2":
             

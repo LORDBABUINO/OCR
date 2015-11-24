@@ -1,4 +1,5 @@
 from PIL import Image
+import math
 
 def percentOfPixels(img):
     count = 0 

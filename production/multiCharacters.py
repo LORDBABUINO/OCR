@@ -30,48 +30,128 @@ def pixelSearch(originalImage, newImage, recorded, curPixel):
 		if curPixel[1] == originalImage.height-1 and curPixel[0] == originalImage.width-1:
 			
 			# Bottom right corner
-			# Do nothing
-			return newImage, recorded
+			# Check the pixel to the left, top left, top
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+
+		elif curPixel[1] == 0 and curPixel[0] == 0:
+			
+			# Top left corner
+			# Check the pixel to the right, bottom, bottom right
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] -= 1
+			curPixel[1] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+
+		elif curPixel[1] == 0 and curPixel[0] == originalImage.width-1:
+			
+			# Top right corner
+			# Check the pixel to the left, bottom, bottom left
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+
+		elif curPixel[1] == originalImage.height-1 and curPixel[0] == 0:
+			
+			# Bottom left corner
+			# Check the pixel to the right, top, top right
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
 
 		elif curPixel[1] == originalImage.height-1:
 			
 			# Bottom edge
-			# Only check the pixel to the right
+			# Check the pixel to the left, top left, top, top right, right
 			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+
+		elif curPixel[1] == 0:
+
+			# Top edge
+			# Check left, bottom left, bottom, bottom right, right
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] -= 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
 
 		elif curPixel[0] == 0:
 			
 			# Left edge
-			# Check right, bottom, and bottom right
+			# Check top, top right, right, bottom right, bottom
+			curPixel[1] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
 			curPixel[0] += 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
-			curPixel[0] -= 1
 			curPixel[1] += 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
-			curPixel[0] += 1
+			curPixel[1] += 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			
 
 		elif curPixel[0] == originalImage.width-1:
 			
 			# Right edge
-			# Check bottom, and bottom left
-			curPixel[1] += 1
+			# Check top, top left, left, bottom left, bottom
+			curPixel[1] -= 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
 			curPixel[0] -= 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] += 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			
 
 		else:
 
 			# Default case
+			curPixel[1] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
 			curPixel[0] += 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
-			curPixel[0] -= 2
 			curPixel[1] += 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
-			curPixel[0] += 1
+			curPixel[1] += 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
-			curPixel[0] += 1
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[0] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] -= 1
+			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
+			curPixel[1] -= 1
 			newImage, recorded = pixelSearch(originalImage, newImage, recorded, copy.deepcopy(curPixel))
 
 	return newImage, recorded
