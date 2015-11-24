@@ -12,10 +12,9 @@ Questions to ask Professor on November 13th:
 
 To Do:
 
-- split thinned image into equal sections
-- get proportion of black pixels to white pixels from each individual section
-- save as array for feature
-
+- save feature vector into database
+- compare current feature vector to those in the database
+- output recognized digit
 
 
 OCR Program
