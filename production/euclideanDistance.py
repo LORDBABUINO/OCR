@@ -9,7 +9,7 @@ import math
 #	s - feature vector # 2
 # outputs:
 #	d - euclidean distance of q and s feature vector rounded to 4 decimal places
-def euclideandistance (q, s):
+def euclideanDistance (q, s):
 	d = 0								#initialize return variable
 	i = 0								#initialize counter
 	temp = 0							#initialize temp value for storing difference between the numbers at each index
