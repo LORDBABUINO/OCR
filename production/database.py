@@ -76,16 +76,15 @@ def findCharacter(test, values):
 
 	return minVal[1]
 
-db = mysql.connector.connect(user='leun4090', host='hopper.wlu.ca', password='bigtop6', database='leun4090')
+def DBChar(pixelArr):
+	db = mysql.connector.connect(user='leun4090', host='hopper.wlu.ca', password='bigtop6', database='leun4090')
 
-# Get the values from the DB
-result = selectFromDB(db)
+	# Get the values from the DB
+	result = selectFromDB(db)
 
-pixelArr = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+	# Determine what character the image best corresponds to
+	myChar = findCharacter(pixelArr, result)
 
-# Determine what character the image best corresponds to
-myChar = findCharacter(pixelArr, result)
+	db.close()
 
-print(myChar)
-
-db.close()
+	return

@@ -6,10 +6,12 @@ from scaling import *
 from whiteBlack import *
 from multiCharacters import *
 from statMethod import *
+from database import *
 import time
 import sys
 
 def menu ():
+    
     while True:
         #formatting for the main menu
         print("{0:-^50s}".format(''))
@@ -23,8 +25,10 @@ def menu ():
         print("{0:^50s}".format('2. Filtering'))
         print("{0:^50s}".format('3. Thinning'))
         print("{0:^50s}".format('4. Scaling'))
-        print("{0:^50s}".format('5. Getting features'))
-        print("{0:^50s}".format('6. Quit'))
+        print("{0:^50s}".format('5. Multiple Characters'))
+        print("{0:^50s}".format('6. Zoning'))
+        print("{0:^50s}".format('7. Character Recognition'))
+        print("{0:^50s}".format('8. Quit'))
         
         #adds blanks lines and waits for the user input 
         print()
@@ -73,7 +77,6 @@ def menu ():
 
             # Get the unique images
             images = charactersToRead(myImage)
-            count = 0
 
             for image in images:
                 image = scaleImage(image, 120, 120)
@@ -82,7 +85,6 @@ def menu ():
                 image.show()
                 imageArray = divideImage(image)
                 print(imageArray)
-
 
         elif menuoption == "2":
             
@@ -168,22 +170,70 @@ def menu ():
                     print("Image import failed - file not found")
 
         elif menuoption == "5":
-            print("Getting features")
-            while True:
-                # gets the filename from the user, opens the file, and tells user it imported successfully
-                filename = input('Please enter the filename for the image you\'d like to use: ')
 
+            while True:
+                # Gets the file from the user
+                filename = input('Please enter the filename for the image you\'d like to use: ')
+                
                 try:
+                    # Opens file and converts the image to grayscale
                     imgBase = Image.open(filename).convert("L")
-                    print('')
-                    print('Image imported successfully')
-                    print('')
+                    
+                    # Get the unique images
+                    images = charactersToRead(myImage)
+
+                    for image in images:
+                        image.show()
+
+                    print("\nComplete.\n")
                     break
                 except IOError:
                     print("Image import failed - file not found")
 
-            print(divideImage(imgBase))
         elif menuoption == "6":
+
+            while True:
+                # Gets the file from the user
+                filename = input('Please enter the filename for the image you\'d like to use: ')
+                
+                try:
+                    # Opens file and converts the image to grayscale
+                    imgBase = Image.open(filename).convert("L")
+                    
+                    image = scaleImage(imgBase, 120, 120)
+                    image = thinning(image)
+                    imageArray = divideImage(image)
+                    print(imageArray)
+
+                    print("\nComplete.\n")
+                    break
+                except IOError:
+                    print("Image import failed - file not found")
+
+        elif menuoption == "7":
+
+            while True:
+                # Gets the file from the user
+                filename = input('Please enter the filename for the image you\'d like to use: ')
+                
+                try:
+                    # Opens file and converts the image to grayscale
+                    imgBase = Image.open(filename).convert("L")
+                    
+                    image = scaleImage(imgBase, 120, 120)
+                    image = thinning(image)
+                    imageArray = divideImage(image)
+                    
+                    result = DBMain(imageArray)
+
+                    print("Result: {0}".format(result))
+
+                    print("\nComplete.\n")
+                    break
+                except IOError:
+                    print("Image import failed - file not found")
+
+        elif menuoption == "8":
             # exits the program
             print("Quitting program.\n")
             break
