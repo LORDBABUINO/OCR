@@ -2,21 +2,21 @@ from PIL import Image
 
 def thinning(img):
     
-    imgTemp = Image.new("L", (img.width, img.height))  #create new image
+    imgTemp = Image.new("1", (img.width-1, img.height-1))  #create new image
     pixelCounter = 0                                    #Keep track of how many pixels have been checked
     deleted = True                                      #boolean variable to determine if a pixel is deleted
     count = 0                                           #keeps track of how many pixels have been deleted in one iteration
-    size = img.width * img.height                  #The size of the image to compare to the pixel counter
+    size = (img.width-1) * (img.height-1)               #The size of the image to compare to the pixel counter
     imgA = []                                           #used to get the pixels around the pixel in question
     
     while deleted:                                      #loop while there are still pixels being deleted
         
         deleted = False                                 #initially set it to false 
         
-        for i in range(img.width):                         #for every pixel 
-            for j in range(img.height):
+        for i in range(0, img.width-1):                         #for every pixel 
+            for j in range(0, img.height-1):
                 del imgA[:]                                     #delete the array contents 
-                print(imgA)
+
                 if (i == 0 or j == 0):                            #if the index is out of bounds, set the pixel to white
                     imgA.append(255)
                 else:               

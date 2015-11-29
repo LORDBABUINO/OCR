@@ -7,6 +7,7 @@ from whiteBlack import *
 from multiCharacters import *
 from statMethod import *
 from database import *
+from zsAlgorithm import *
 import time
 import sys
 
@@ -50,28 +51,10 @@ def menu ():
                 except IOError:
                     print("Image import failed - file not found")
 
-            myImage = myImage.resize((160,160))
-
-            # Pad the image    
-            myImage = padImage(myImage) 
-            
-            # Apply high pass filter to the image
-            kernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1]
-            myImage = applyFilter(myImage, kernel)
-
-            # Apply low pass filter to the image
-            kernel = [1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9]
-            myImage = applyFilter(myImage, kernel)
-
-            myImage.show()
+            myImage = myImage.resize((80,80))
 
             # Change to BW image
             myImage = convertBW(myImage)
-
-            myImage.show()
-
-            # Invert white/black pixels
-            myImage = invert(myImage)
 
             myImage.show()
 
@@ -80,11 +63,14 @@ def menu ():
 
             for image in images:
                 image = scaleImage(image, 120, 120)
+                image = padZeros(image)
                 image.show()
-                image = thinning(image)
+                image = zsAlgorithm(image)
                 image.show()
                 imageArray = divideImage(image)
                 print(imageArray)
+                finalCharacter = DBChar(imageArray)
+                print(finalCharacter)
 
         elif menuoption == "2":
             
@@ -135,14 +121,41 @@ def menu ():
                 
                 try:
                     # Opens file and converts the image to black and white
-                    imgBase = Image.open(filename).convert("1")
-                    imgBase.show()
+                    imgBase = Image.open(filename).convert("L")
                     
-                    # Thins the image
-                    t1=time.time()
-                    imgThinned = thinning(imgBase)
-                    print(time.time()-t1)
-                    imgThinned.show()
+                    imgBase = imgBase.resize((120,120))
+
+                    # Change to BW image
+                    myImage = convertBW(imgBase)
+
+                    while True:
+
+                        print("{0:-^50s}".format(''))
+                        print("{0:-^50s}".format('  Select your Thinning Algorithm  '))
+                        print("{0:-^50s}".format(''))
+                        print("{0:^50s}".format('1. ZS Algorithm'))
+                        print("{0:^50s}".format('2. 20 Rules Algorithm'))
+
+                        print()
+                        thinningOption = input('Enter your choice here: ')
+                        print()
+
+                        if thinningOption == "1":
+                            
+                            myImage.show()
+                            myImage = zsAlgorithm(myImage)
+                            myImage.show()
+                            break
+
+                        elif thinningOption == "2":
+                            
+                            myImage.show()
+                            myImage = thinning(myImage)
+                            myImage.show()
+                            break
+
+                        else:
+                            print("Invalid option. Please try again.\n")
 
                     print("\nComplete.\n")
                     break
