@@ -125,7 +125,7 @@ def DBInsertChar(temparray, myChar):
 
 	cursor = db.cursor()
 
-	statement = "INSERT INTO features VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16})"\
+	statement = "INSERT INTO features VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, '{16}')"\
 	.format(temparray[0], temparray[1], temparray[2], temparray[3], temparray[4], temparray[5], temparray[6], temparray[7], temparray[8],\
 					 temparray[9], temparray[10], temparray[11], temparray[12], temparray[13], temparray[14], temparray[15], myChar)
 	cursor.execute(statement)

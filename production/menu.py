@@ -10,266 +10,268 @@ from database import *
 from zsAlgorithm import *
 import time
 import sys
+import copy
 
 def menu ():
-    
-    while True:
-        #formatting for the main menu
-        print("{0:-^50s}".format(''))
-        print("{0:-^50s}".format('  Main Menu  '))
-        print("{0:-^50s}".format(''))
-        print("{0:^50s}".format('Welcome to the CP467 Final Project demo.'))
-        print()
-        
-        # gives the user the choice of whether to run the program or end
-        print("{0:^50s}".format('1. OCR System'))
-        print("{0:^50s}".format('2. Filtering'))
-        print("{0:^50s}".format('3. Thinning'))
-        print("{0:^50s}".format('4. Scaling'))
-        print("{0:^50s}".format('5. Multiple Characters'))
-        print("{0:^50s}".format('6. Zoning'))
-        print("{0:^50s}".format('7. Character Recognition'))
-        print("{0:^50s}".format('8. Quit'))
-        
-        #adds blanks lines and waits for the user input 
-        print()
-        menuoption = input('Enter your choice here: ')
-        print()
-        
-        if menuoption == "1":
+	
+	while True:
+		#formatting for the main menu
+		print("{0:-^50s}".format(''))
+		print("{0:-^50s}".format('	Main Menu  '))
+		print("{0:-^50s}".format(''))
+		print("{0:^50s}".format('Welcome to the CP467 Final Project.'))
+		print()
+		
+		# gives the user the choice of whether to run the program or end
+		print("{0:^50s}".format('1. OCR System'))
+		print("{0:^50s}".format('2. Filtering'))
+		print("{0:^50s}".format('3. Thinning'))
+		print("{0:^50s}".format('4. Scaling'))
+		print("{0:^50s}".format('5. Multiple Characters'))
+		print("{0:^50s}".format('6. Zoning'))
+		print("{0:^50s}".format('7. Character Recognition'))
+		print("{0:^50s}".format('8. Quit'))
+		
+		#adds blanks lines and waits for the user input 
+		print()
+		menuoption = input('Enter your choice here: ')
+		print()
+		
+		if menuoption == "1":
 
-            while True:
-                # gets the filename from the user, opens the file, and tells user it imported successfully
-                filename = input('Please enter the filename for the image you\'d like to use: ')
+			while True:
+				# gets the filename from the user, opens the file, and tells user it imported successfully
+				filename = input('Please enter the filename for the image you\'d like to use: ')
 
-                try:
-                    myImage = Image.open(filename).convert("L")
-                    print('')
-                    print('Image imported successfully')
-                    print('')
-                    break
-                except IOError:
-                    print("Image import failed - file not found")
+				try:
+					myImage = Image.open(filename).convert("L")
+					print('')
+					print('Image imported successfully')
+					print('')
+					break
+				except IOError:
+					print("Image import failed - file not found")
 
-            myImage = myImage.resize((70,70))
+			myImage = myImage.resize((70,70))
 
-            # Change to BW image
-            myImage = convertBW(myImage)
+			# Change to BW image
+			myImage = convertBW(myImage)
+			
+			# Get the unique images
+			images = charactersToRead(myImage)
 
-            myImage.show()
+			for image in images:
+				original = copy.deepcopy(image)
+				image = scaleImage(image, 120, 120)
+				image = padZeros(image)
+				image = zsAlgorithm(image)
+				imageArray = divideImage(image)
+				finalCharacter = DBChar(imageArray)
+				print("\nThe character in the image is:",finalCharacter,"\n")
+				original.show()
+				
+				noErrors = True
 
-            # Get the unique images
-            images = charactersToRead(myImage)
+				while noErrors:
 
-            for image in images:
-                image = scaleImage(image, 120, 120)
-                image = padZeros(image)
-                image.show()
-                image = zsAlgorithm(image)
-                image.show()
-                imageArray = divideImage(image)
-                print(imageArray)
-                finalCharacter = DBChar(imageArray)
-                print(finalCharacter)
+					correct = input("Is this the correct character? (y/n) ")
 
-                noErrors = True
+					if correct == "y":
+						print("Thank you for your feedback.")
+						noErrors = False
+					elif correct == "n":
+						correctChar = input("What was the correct character? ")
+						DBInsertChar(imageArray, correctChar)
+						print("Database updated. Thank you for your feedback.")
+						noErrors = False
+					else:
+						print("That is not a valid input please try again.\n")
 
-                while noErrors:
+			print("\nComplete\n")
 
-                    correct = input("Is this the correct character? (y/n) ")
+		elif menuoption == "2":
+			
+			while True:
+				# gets the filename from the user, opens the file, and tells user it imported successfully
+				filename = input('Please enter the filename for the image you\'d like to use: ')
 
-                    if correct == "y":
-                        print("Thank you for your feedback.")
-                        noErrors = False
-                    elif correct == "n":
-                        correctChar = input("What was the correct character? ")
-                        DBInsertChar(imageArray, correctChar)
-                        print("Database updated. Thank you for your feedback.")
-                        noErrors = False
-                    else:
-                        print("That is not a valid input please try again.\n")
+				try:
+					imgBase = Image.open(filename).convert("L")
+					print('')
+					print('Image imported successfully')
+					print('')
+					break
+				except IOError:
+					print("Image import failed - file not found")
+			
+			while True:
 
-            print("\nComplete\n")
+				print("{0:-^50s}".format(''))
+				print("{0:-^50s}".format('	Select your Filter	'))
+				print("{0:-^50s}".format(''))
+				print("{0:^50s}".format('1. High Pass Filter'))
+				print("{0:^50s}".format('2. Low Pass Filter'))
 
-        elif menuoption == "2":
-            
-            while True:
-                # gets the filename from the user, opens the file, and tells user it imported successfully
-                filename = input('Please enter the filename for the image you\'d like to use: ')
+				print()
+				filteroption = input('Enter your choice here: ')
+				print()
 
-                try:
-                    imgBase = Image.open(filename).convert("L")
-                    print('')
-                    print('Image imported successfully')
-                    print('')
-                    break
-                except IOError:
-                    print("Image import failed - file not found")
-            
-            while True:
+				if filteroption == "1":
+					kernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1]
+					break
+				elif filteroption == "2":
+					kernel = [1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9]
+					break
+				else:
+					print("Invalid option. Please try again.\n")
+			#end if
+			imgBase.show()		  
+			imgPadded = padImage(imgBase) #pad input image
+			imgFiltered = applyFilter(imgPadded, kernel)	#filters image
+			imgFiltered.show()				#show filtered image
+			
+		elif menuoption == "3":
 
-                print("{0:-^50s}".format(''))
-                print("{0:-^50s}".format('  Select your Filter  '))
-                print("{0:-^50s}".format(''))
-                print("{0:^50s}".format('1. High Pass Filter'))
-                print("{0:^50s}".format('2. Low Pass Filter'))
+			while True:
+				# Gets the file from the user
+				filename = input('Please enter the filename for the image you\'d like to use: ')
+				
+				try:
+					# Opens file and converts the image to black and white
+					imgBase = Image.open(filename).convert("L")
+					
+					imgBase = imgBase.resize((120,120))
 
-                print()
-                filteroption = input('Enter your choice here: ')
-                print()
+					# Change to BW image
+					myImage = convertBW(imgBase)
 
-                if filteroption == "1":
-                    kernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1]
-                    break
-                elif filteroption == "2":
-                    kernel = [1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9]
-                    break
-                else:
-                    print("Invalid option. Please try again.\n")
-            #end if
-            imgBase.show()        
-            imgPadded = padImage(imgBase) #pad input image
-            imgFiltered = applyFilter(imgPadded, kernel)    #filters image
-            imgFiltered.show()              #show filtered image
-            
-        elif menuoption == "3":
+					while True:
 
-            while True:
-                # Gets the file from the user
-                filename = input('Please enter the filename for the image you\'d like to use: ')
-                
-                try:
-                    # Opens file and converts the image to black and white
-                    imgBase = Image.open(filename).convert("L")
-                    
-                    imgBase = imgBase.resize((120,120))
+						print("{0:-^50s}".format(''))
+						print("{0:-^50s}".format('	Select your Thinning Algorithm	'))
+						print("{0:-^50s}".format(''))
+						print("{0:^50s}".format('1. ZS Algorithm'))
+						print("{0:^50s}".format('2. 20 Rules Algorithm'))
 
-                    # Change to BW image
-                    myImage = convertBW(imgBase)
+						print()
+						thinningOption = input('Enter your choice here: ')
+						print()
 
-                    while True:
+						if thinningOption == "1":
+							
+							myImage.show()
+							myImage = zsAlgorithm(myImage)
+							myImage.show()
+							break
 
-                        print("{0:-^50s}".format(''))
-                        print("{0:-^50s}".format('  Select your Thinning Algorithm  '))
-                        print("{0:-^50s}".format(''))
-                        print("{0:^50s}".format('1. ZS Algorithm'))
-                        print("{0:^50s}".format('2. 20 Rules Algorithm'))
+						elif thinningOption == "2":
+							
+							myImage.show()
+							myImage = thinning(myImage)
+							myImage.show()
+							break
 
-                        print()
-                        thinningOption = input('Enter your choice here: ')
-                        print()
+						else:
+							print("Invalid option. Please try again.\n")
 
-                        if thinningOption == "1":
-                            
-                            myImage.show()
-                            myImage = zsAlgorithm(myImage)
-                            myImage.show()
-                            break
+					print("\nComplete.\n")
+					break
+				except IOError:
+					print("Image import failed - file not found")
 
-                        elif thinningOption == "2":
-                            
-                            myImage.show()
-                            myImage = thinning(myImage)
-                            myImage.show()
-                            break
+		elif menuoption == "4":
 
-                        else:
-                            print("Invalid option. Please try again.\n")
+			while True:
+				# Gets the file from the user
+				filename = input('Please enter the filename for the image you\'d like to use: ')
+				
+				try:
+					# Opens file and converts the image to grayscale
+					imgBase = Image.open(filename).convert("L")
+					imgBase.show()
+					
+					# Thins the image
+					imgThinned = scaleImage(imgBase, 120, 120)
+					imgThinned.save("tests/scaleoutput.bmp")
+					imgThinned.show()
 
-                    print("\nComplete.\n")
-                    break
-                except IOError:
-                    print("Image import failed - file not found")
+					print("\nComplete.\n")
+					break
+				except IOError:
+					print("Image import failed - file not found")
 
-        elif menuoption == "4":
+		elif menuoption == "5":
 
-            while True:
-                # Gets the file from the user
-                filename = input('Please enter the filename for the image you\'d like to use: ')
-                
-                try:
-                    # Opens file and converts the image to grayscale
-                    imgBase = Image.open(filename).convert("L")
-                    imgBase.show()
-                    
-                    # Thins the image
-                    imgThinned = scaleImage(imgBase, 120, 120)
-                    imgThinned.show()
+			while True:
+				# Gets the file from the user
+				filename = input('Please enter the filename for the image you\'d like to use: ')
+				
+				try:
+					# Opens file and converts the image to grayscale
+					imgBase = Image.open(filename).convert("L")
+					
+					imgBase = imgBase.resize((70,70))
+					
+					# Get the unique images
+					images = charactersToRead(imgBase)
+					
+					imgBase.show()
+					
+					for image in images:
+						image.show()
 
-                    print("\nComplete.\n")
-                    break
-                except IOError:
-                    print("Image import failed - file not found")
+					print("\nComplete.\n")
+					break
+				except IOError:
+					print("Image import failed - file not found")
 
-        elif menuoption == "5":
+		elif menuoption == "6":
 
-            while True:
-                # Gets the file from the user
-                filename = input('Please enter the filename for the image you\'d like to use: ')
-                
-                try:
-                    # Opens file and converts the image to grayscale
-                    imgBase = Image.open(filename).convert("L")
-                    
-                    # Get the unique images
-                    images = charactersToRead(myImage)
+			while True:
+				# Gets the file from the user
+				filename = input('Please enter the filename for the image you\'d like to use: ')
+				
+				try:
+					# Opens file and converts the image to grayscale
+					imgBase = Image.open(filename).convert("L")
+					
+					image = scaleImage(imgBase, 120, 120)
+					image = thinning(image)
+					imageArray = divideImage(image)
+					print(imageArray)
 
-                    for image in images:
-                        image.show()
+					print("\nComplete.\n")
+					break
+				except IOError:
+					print("Image import failed - file not found")
 
-                    print("\nComplete.\n")
-                    break
-                except IOError:
-                    print("Image import failed - file not found")
+		elif menuoption == "7":
 
-        elif menuoption == "6":
+			while True:
+				# Gets the file from the user
+				filename = input('Please enter the filename for the image you\'d like to use: ')
+				
+				try:
+					# Opens file and converts the image to grayscale
+					imgBase = Image.open(filename).convert("L")
+					
+					image = scaleImage(imgBase, 120, 120)
+					image = thinning(image)
+					imageArray = divideImage(image)
+					
+					result = DBChar(imageArray)
 
-            while True:
-                # Gets the file from the user
-                filename = input('Please enter the filename for the image you\'d like to use: ')
-                
-                try:
-                    # Opens file and converts the image to grayscale
-                    imgBase = Image.open(filename).convert("L")
-                    
-                    image = scaleImage(imgBase, 120, 120)
-                    image = thinning(image)
-                    imageArray = divideImage(image)
-                    print(imageArray)
+					print("\nThe character in the image is:",result,"\n")
+					imgBase.show()
+					break
+				except IOError:
+					print("Image import failed - file not found")
 
-                    print("\nComplete.\n")
-                    break
-                except IOError:
-                    print("Image import failed - file not found")
-
-        elif menuoption == "7":
-
-            while True:
-                # Gets the file from the user
-                filename = input('Please enter the filename for the image you\'d like to use: ')
-                
-                try:
-                    # Opens file and converts the image to grayscale
-                    imgBase = Image.open(filename).convert("L")
-                    
-                    image = scaleImage(imgBase, 120, 120)
-                    image = thinning(image)
-                    imageArray = divideImage(image)
-                    
-                    result = DBMain(imageArray)
-
-                    print("Result: {0}".format(result))
-
-                    print("\nComplete.\n")
-                    break
-                except IOError:
-                    print("Image import failed - file not found")
-
-        elif menuoption == "8":
-            # exits the program
-            print("Quitting program.\n")
-            break
-        else:
-            print()
-            print("Not a valid menu option. Please try again.")
-            print()
+		elif menuoption == "8":
+			# exits the program
+			print("Quitting program.")
+			break
+		else:
+			print()
+			print("Not a valid menu option. Please try again.")
+			print()
