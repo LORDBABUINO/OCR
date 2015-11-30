@@ -13,7 +13,7 @@ def percentOfPixels(img):
     
     percent = count/imgSize
     
-    return percent 
+    return round(percent, 4)
 
 ##         w25 w50 w75
 ##       --- --- --- ---

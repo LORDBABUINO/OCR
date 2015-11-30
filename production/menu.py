@@ -51,7 +51,7 @@ def menu ():
                 except IOError:
                     print("Image import failed - file not found")
 
-            myImage = myImage.resize((80,80))
+            myImage = myImage.resize((70,70))
 
             # Change to BW image
             myImage = convertBW(myImage)
@@ -71,6 +71,25 @@ def menu ():
                 print(imageArray)
                 finalCharacter = DBChar(imageArray)
                 print(finalCharacter)
+
+                noErrors = True
+
+                while noErrors:
+
+                    correct = input("Is this the correct character? (y/n) ")
+
+                    if correct == "y":
+                        print("Thank you for your feedback.")
+                        noErrors = False
+                    elif correct == "n":
+                        correctChar = input("What was the correct character? ")
+                        DBInsertChar(imageArray, correctChar)
+                        print("Database updated. Thank you for your feedback.")
+                        noErrors = False
+                    else:
+                        print("That is not a valid input please try again.\n")
+
+            print("\nComplete\n")
 
         elif menuoption == "2":
             
