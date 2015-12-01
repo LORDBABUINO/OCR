@@ -109,8 +109,12 @@ def menu ():
 				print("{0:-^50s}".format(''))
 				print("{0:-^50s}".format('	Select your Filter	'))
 				print("{0:-^50s}".format(''))
-				print("{0:^50s}".format('1. High Pass Filter'))
-				print("{0:^50s}".format('2. Low Pass Filter'))
+				print("{0:^50s}".format('1. Edge Detection'))
+				print("{0:^50s}".format('2. Blur image'))
+				print("{0:^50s}".format('3. Sharpen image'))
+				print("{0:^50s}".format('4. Left Sobel'))
+				print("{0:^50s}".format('5. Right Sobel'))
+				
 
 				print()
 				filteroption = input('Enter your choice here: ')
@@ -120,7 +124,16 @@ def menu ():
 					kernel = [-1, -1, -1, -1, 8, -1, -1, -1, -1]
 					break
 				elif filteroption == "2":
-					kernel = [1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9, 1/9]
+					kernel = [1/18, 1/8, 1/18, 1/8, 1/4, 1/8, 1/18, 1/8, 1/16]
+					break
+				elif filteroption == "3":
+					kernel = [0, -1, 0, -1, 5, -1, 0, -1, 0]
+					break
+				elif filteroption == "4":
+					kernel = [1, 0, -1, 2, 0, -2, 1, 0, -1]
+					break
+				elif filteroption == "5":
+					kernel = [-1, 0, 1, -2, 0, 2, -1, 0, 1]
 					break
 				else:
 					print("Invalid option. Please try again.\n")
@@ -236,7 +249,9 @@ def menu ():
 					imgBase = Image.open(filename).convert("L")
 					
 					image = scaleImage(imgBase, 120, 120)
+					
 					image = thinning(image)
+					image.show()
 					imageArray = divideImage(image)
 					print(imageArray)
 
