@@ -17,7 +17,7 @@ def menu ():
 	while True:
 		#formatting for the main menu
 		print("{0:-^50s}".format(''))
-		print("{0:-^50s}".format('	Main Menu  '))
+		print("{0:-^50s}".format('	Main Menu	'))
 		print("{0:-^50s}".format(''))
 		print("{0:^50s}".format('Welcome to the CP467 Final Project.'))
 		print()
@@ -114,6 +114,7 @@ def menu ():
 				print("{0:^50s}".format('3. Sharpen image'))
 				print("{0:^50s}".format('4. Left Sobel'))
 				print("{0:^50s}".format('5. Right Sobel'))
+				print("{0:^50s}".format('6. Custom'))
 				
 
 				print()
@@ -134,6 +135,11 @@ def menu ():
 					break
 				elif filteroption == "5":
 					kernel = [-1, 0, 1, -2, 0, 2, -1, 0, 1]
+					break
+				elif filteroption == "6":
+					kernelinput = input("Enter your 9 kernel matrix values from top left to bottom right separated by commas: ")
+					kernel = int(kernelinput.rsplit(","))
+					print kernel
 					break
 				else:
 					print("Invalid option. Please try again.\n")
