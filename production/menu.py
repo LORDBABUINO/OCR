@@ -137,9 +137,18 @@ def menu ():
 					kernel = [-1, 0, 1, -2, 0, 2, -1, 0, 1]
 					break
 				elif filteroption == "6":
-					kernelinput = input("Enter your 9 kernel matrix values from top left to bottom right separated by commas: ")
-					kernel = int(kernelinput.rsplit(","))
-					print kernel
+					kernel = []
+					print("Please enter the 9 kernel values from top left to bottom right as each prompt comes up")
+					print("Please only enter in integers and decimals (no fractions)")
+					kernelinput = float(input("Please enter the 1st value: "))
+					kernel.append(kernelinput)
+					kernelinput = float(input("Please enter the 2nd value: "))
+					kernel.append(kernelinput)
+					kernelinput = float(input("Please enter the 3rd value: "))
+					kernel.append(kernelinput)
+					for m in range(4, 10):
+						kernelinput = float(input("Please enter the {0}th value: ".format(m)))
+						kernel.append(kernelinput)
 					break
 				else:
 					print("Invalid option. Please try again.\n")
