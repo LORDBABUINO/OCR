@@ -12,9 +12,7 @@ Questions to ask Professor on November 13th:
 
 To Do:
 
-- save feature vector into database
-- compare current feature vector to those in the database
-- output recognized digit
+- DONE !
 
 
 OCR Program
