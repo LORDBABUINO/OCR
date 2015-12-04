@@ -17,7 +17,7 @@ def menu ():
 	while True:
 		#formatting for the main menu
 		print("{0:-^50s}".format(''))
-		print("{0:-^50s}".format('	Main Menu	'))
+		print("{0:-^50s}".format('  Main Menu  '))
 		print("{0:-^50s}".format(''))
 		print("{0:^50s}".format('Welcome to the CP467 Final Project.'))
 		print()
@@ -265,6 +265,8 @@ def menu ():
 					
 					image = scaleImage(imgBase, 120, 120)
 					
+					image = padZeros(image)
+
 					image = thinning(image)
 					image.show()
 					imageArray = divideImage(image)
