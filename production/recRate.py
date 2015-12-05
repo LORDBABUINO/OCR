@@ -15,10 +15,8 @@ import copy
 
 def getRecognitionRate():
 
-	total = 0
-	correct = 0
-
 	for i in range(0,10):
+		print("The current number to test for is:",i)
 		for j in range(1, 16):
 
 			try:
@@ -40,17 +38,8 @@ def getRecognitionRate():
 				image = zsAlgorithm(image)
 				imageArray = divideImage(image)
 				finalCharacter = DBChar(imageArray)
-				print("\nThe character in the image is:",finalCharacter,"\n")
-				original.show()
+				print("The character in the image is:",finalCharacter)
 
-				user = input("Correct Input? (y/n) ")
-
-				if user == "y":
-					correct += 1
-				total += 1
-
-	ratio = correct / total
-	print(ratio)
 	return
 
 getRecognitionRate()
