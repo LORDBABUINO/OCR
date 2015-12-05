@@ -15,6 +15,9 @@ import copy
 
 def getRecognitionRate():
 
+	total = [0] * 10
+	correct = [0] * 10
+
 	for i in range(0,10):
 		print("The current number to test for is:",i)
 		for j in range(1, 16):
@@ -39,6 +42,10 @@ def getRecognitionRate():
 				imageArray = divideImage(image)
 				finalCharacter = DBChar(imageArray)
 				print("The character in the image is:",finalCharacter)
+
+				if finalCharacter == i:
+					correct[i] += 1
+				total[i] += 1
 
 	return
 
