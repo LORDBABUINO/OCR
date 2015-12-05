@@ -57,6 +57,8 @@ def menu ():
 			# Change to BW image
 			myImage = convertBW(myImage)
 			
+			myImage.show()
+
 			# Get the unique images
 			images = charactersToRead(myImage)
 
@@ -188,6 +190,7 @@ def menu ():
 						if thinningOption == "1":
 							
 							myImage.show()
+							myImage = padZeros(myImage)
 							myImage = zsAlgorithm(myImage)
 							myImage.show()
 							break
@@ -195,6 +198,7 @@ def menu ():
 						elif thinningOption == "2":
 							
 							myImage.show()
+							myImage = padZeros(myImage)
 							myImage = thinning(myImage)
 							myImage.show()
 							break
@@ -264,10 +268,9 @@ def menu ():
 					imgBase = Image.open(filename).convert("L")
 					
 					image = scaleImage(imgBase, 120, 120)
-					
+					image = convertBW(image)
 					image = padZeros(image)
-
-					image = thinning(image)
+					image = zsAlgorithm(image)
 					image.show()
 					imageArray = divideImage(image)
 					print(imageArray)
@@ -286,9 +289,11 @@ def menu ():
 				try:
 					# Opens file and converts the image to grayscale
 					imgBase = Image.open(filename).convert("L")
-					
+
 					image = scaleImage(imgBase, 120, 120)
-					image = thinning(image)
+					image = convertBW(image)
+					image = padZeros(image)
+					image = zsAlgorithm(image)
 					imageArray = divideImage(image)
 					
 					result = DBChar(imageArray)
