@@ -47,6 +47,14 @@ def getRecognitionRate():
 					correct[i] += 1
 				total[i] += 1
 
+	print(correct)
+	print(total)
+
+	myNum = 0
+	for item in correct:
+		print(myNum, "-", item/total[myNum], "percent")
+		myNum += 1
+
 	return
 
 getRecognitionRate()
