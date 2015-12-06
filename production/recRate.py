@@ -52,10 +52,18 @@ def getRecognitionRate():
 	print(correct, file=myFile)
 	print(total, file=myFile)
 
+	myTotal = 0
 	myNum = 0
 	for item in correct:
-		print(myNum, "-", item/total[myNum], "percent", file=myFile)
+		myTotal += item/total[myNum]
+		print(myNum, "-", item/total[myNum]*100, "percent", file=myFile)
 		myNum += 1
+
+	myTotal = myTotal / 10
+
+	myTotal = myTotal * 100
+
+	print("Total -", myTotal, "percent", file=myFile)
 
 	myFile.close()
 
