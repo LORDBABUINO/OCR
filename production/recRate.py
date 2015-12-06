@@ -115,7 +115,7 @@ def getCharRecognitionRate():
 		print(myNum, "-", item/total[myNum]*100, "percent", file=myFile)
 		myNum += 1
 
-	myTotal = myTotal / 10
+	myTotal = myTotal / 26
 
 	myTotal = myTotal * 100
 
