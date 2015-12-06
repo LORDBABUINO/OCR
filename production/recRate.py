@@ -125,7 +125,7 @@ def getCharRecognitionRate():
 
 	return
 
-getCharRecognitionRate()
+getRecognitionRate()
 
 # p = subprocess.Popen(["/Applications/Preview.app", "test-nums/0_1.png"], shell=True)
 # test = input("enter something will")
