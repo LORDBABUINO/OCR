@@ -209,4 +209,4 @@ The character in the image is: Z
 23 - 20.0 percent
 24 - 80.0 percent
 25 - 60.0 percent
-Total - 164.66666666666666 percent
+Total - 63.33333333333333 percent
