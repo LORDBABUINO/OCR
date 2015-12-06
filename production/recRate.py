@@ -15,18 +15,20 @@ import copy
 
 def getRecognitionRate():
 
+	myFile = open("recRate-output.txt", "w+")
+
 	total = [0] * 10
 	correct = [0] * 10
 
 	for i in range(0,10):
-		print("The current number to test for is:",i)
+		print("The current number to test for is:",i, file=myFile)
 		for j in range(1, 16):
 
 			try:
 				myImage = Image.open("test-nums/{0}_{1}.png".format(i, j)).convert("L")
-				print('Image imported successfully')
+				print('Image imported successfully', file=myFile)
 			except IOError:
-				print("Image import failed - file not found")
+				print("Image import failed - file not found", file=myFile)
 
 			myImage = myImage.resize((70,70))
 			# Change to BW image
@@ -41,19 +43,21 @@ def getRecognitionRate():
 				image = zsAlgorithm(image)
 				imageArray = divideImage(image)
 				finalCharacter = DBChar(imageArray)
-				print("The character in the image is:",finalCharacter)
+				print("The character in the image is:",finalCharacter, file=myFile)
 
-				if finalCharacter == i:
+				if finalCharacter == str(i):
 					correct[i] += 1
 				total[i] += 1
 
-	print(correct)
-	print(total)
+	print(correct, file=myFile)
+	print(total, file=myFile)
 
 	myNum = 0
 	for item in correct:
-		print(myNum, "-", item/total[myNum], "percent")
+		print(myNum, "-", item/total[myNum], "percent", file=myFile)
 		myNum += 1
+
+	myFile.close()
 
 	return
 
