@@ -1,5 +1,0 @@
-Presentation Testing
-
-Filtering
--High Pass filter
--Low pass filter
