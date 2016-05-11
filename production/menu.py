@@ -178,7 +178,7 @@ def menu ():
 					while True:
 
 						print("{0:-^50s}".format(''))
-						print("{0:-^50s}".format('	Select your Thinning Algorithm	'))
+						print("{0:-^50s}".format(' Select your Thinning Algorithm '))
 						print("{0:-^50s}".format(''))
 						print("{0:^50s}".format('1. ZS Algorithm'))
 						print("{0:^50s}".format('2. 20 Rules Algorithm'))
